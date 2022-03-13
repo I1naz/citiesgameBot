@@ -44,9 +44,9 @@ def play(message):
             game.first_letters[game.current_city[0].lower] += 1
             game.current_city = choice(cities_only)
             mess = f'{game.current_city}, {country[city[game.current_city]]}'
-            bot.send_message(message.chat.id, mess, parse_mode='html')
-            bot.send_message(message.chat.id, f'Тебе на {game.current_city[-1].upper()}', parse_mode='html')
-        elif message.text.capitalize().startswith(game.current_city[-1].upper()) and not message.text.capitalize in cities_only:
+            bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
+                             parse_mode='html')
+        elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize not in cities_only:
             bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново', parse_mode='html')
         else:
             bot.send_message(message.chat.id, f'{choice(some_phrases[:-1])}, говори заново', parse_mode='html')
@@ -66,8 +66,7 @@ def callback_inline(call):
                 game.all_cities += game.current_city
                 game.first_letters[game.current_city[0].lower] += 1
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
-                bot.send_message(call.message.chat.id, mess, parse_mode='html')
-                bot.send_message(call.message.chat.id, f'Тебе на {game.current_city[-1].upper()}', parse_mode='html')
+                bot.send_message(call.message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
 
             elif call.data == 'me':
                 game.is_me_first = False
