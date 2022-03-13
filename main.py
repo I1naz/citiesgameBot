@@ -1,7 +1,6 @@
 import telebot
 from Config import *
 from Markups import *
-from Cities import *
 from flask import Flask, request
 import os
 import random
