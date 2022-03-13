@@ -1,9 +1,10 @@
 import telebot
 from Config import *
 from Markups import *
+from Cities import *
 from flask import Flask, request
 import os
-import random
+from random import choice
 
 
 bot = telebot.TeleBot(Token)
@@ -15,6 +16,10 @@ class Game:
         self.count = 0
         self.current_city = None
         self.all_cities = None
+        self.is_started = False
+        self.is_me_first = False
+        self.is_he_first = False
+        self.is_finished = False
         self.first_letters = {'а': 0, 'б': 0, 'в': 0, 'г': 0, 'д': 0, 'е': 0, 'ё': 0, 'ж': 0, 'з': 0, 'и': 0, 'й': 0,
                               'к': 0, 'л': 0, 'м': 0, 'н': 0, 'о': 0, 'п': 0, 'р': 0, 'с': 0, 'т': 0, 'у': 0, 'ф': 0,
                               'х': 0, 'ц': 0, 'ч': 0, 'ш': 0, 'щ': 0, 'ю': 0, 'я': 0}
@@ -34,9 +39,9 @@ def help(message):
 @bot.message_handler(content_types=['text'])
 def play(message):
     if message.chat.type == 'private':
-        # else:
-        #     bot.send_message(message.chat.id, ' А я чибурик!')
-        pass
+        if game.is_started:
+            pass
+
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -44,9 +49,16 @@ def callback_inline(call):
     try:
         if call.message:
             if call.data == 'you':
+                game.is_started = True
+                game.is_me_first = True
+                game.is_he_first = False
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Начинаю!',
                                       reply_markup=None)
+                bot.send_message(call.message.chat.id, choice(cities_only), parse_mode='html')
+
             elif call.data == 'me':
+                game.is_me_first = False
+                game.is_he_first = True
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                                       text='Начинай!', reply_markup=None)
             elif call.data == 'play':
