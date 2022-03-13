@@ -47,9 +47,9 @@ def play(message):
             bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                              parse_mode='html')
         elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize not in cities_only:
-            bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново', parse_mode='html')
+            bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
         else:
-            bot.send_message(message.chat.id, f'{choice(some_phrases[:-1])}, говори заново', parse_mode='html')
+            bot.send_message(message.chat.id, f'{choice(some_phrases[:-1])} говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
 
 
 @bot.callback_query_handler(func=lambda call: True)
