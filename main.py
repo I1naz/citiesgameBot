@@ -15,7 +15,7 @@ class Game:
     def __init__(self):
         self.count = 0
         self.current_city = None
-        self.all_cities = None
+        self.all_cities = ''
         self.is_started = False
         self.is_me_first = False
         self.is_he_first = False
@@ -39,9 +39,17 @@ def help(message):
 @bot.message_handler(content_types=['text'])
 def play(message):
     if message.chat.type == 'private':
-        if game.is_started:
-            pass
-
+        if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize in cities_only:
+            game.all_cities += message.text
+            game.first_letters[game.current_city[0].lower] += 1
+            game.current_city = choice(cities_only)
+            mess = f'{game.current_city}, {country[city[game.current_city]]}'
+            bot.send_message(message.chat.id, mess, parse_mode='html')
+            bot.send_message(message.chat.id, f'Тебе на {game.current_city[-1].upper()}', parse_mode='html')
+        elif message.text.capitalize().startswith(game.current_city[-1].upper()) and not message.text.capitalize in cities_only:
+            bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново', parse_mode='html')
+        else:
+            bot.send_message(message.chat.id, f'{choice(some_phrases[:-1])}, говори заново', parse_mode='html')
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -54,7 +62,12 @@ def callback_inline(call):
                 game.is_he_first = False
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Начинаю!',
                                       reply_markup=None)
-                bot.send_message(call.message.chat.id, choice(cities_only), parse_mode='html')
+                game.current_city = choice(cities_only)
+                game.all_cities += game.current_city
+                game.first_letters[game.current_city[0].lower] += 1
+                mess = f'{game.current_city}, {country[city[game.current_city]]}'
+                bot.send_message(call.message.chat.id, mess, parse_mode='html')
+                bot.send_message(call.message.chat.id, f'Тебе на {game.current_city[-1].upper()}', parse_mode='html')
 
             elif call.data == 'me':
                 game.is_me_first = False
