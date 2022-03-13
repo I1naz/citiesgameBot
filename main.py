@@ -3,14 +3,12 @@ from Config import *
 from Markups import *
 from Cities import *
 from flask import Flask, request
-from flask_sslify import SSLify
 import os
 import random
 
 
 bot = telebot.TeleBot(Token)
 server = Flask(__name__)
-sslify = SSLify(server)
 
 
 class Game:
@@ -65,6 +63,7 @@ def webhook():
     bot.remove_webhook()
     bot.set_webhook(url=APP_Url)
     return '!', 200
+
 
 @server.route(f'/{Token}', methods=['POST'])
 def get_message():
