@@ -39,14 +39,14 @@ def help(message):
 @bot.message_handler(content_types=['text'])
 def play(message):
     if message.chat.type == 'private':
-        if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize in cities_only:
+        if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() in cities_only:
             game.all_cities += message.text
             game.first_letters[game.current_city[0].lower] += 1
             game.current_city = choice(cities_only)
             mess = f'{game.current_city}, {country[city[game.current_city]]}'
             bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                              parse_mode='html')
-        elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize not in cities_only:
+        elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() not in cities_only:
             bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
         else:
             bot.send_message(message.chat.id, f'{choice(some_phrases[:-1])} говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
