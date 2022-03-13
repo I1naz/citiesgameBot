@@ -1,7 +1,6 @@
 import telebot
 from Config import *
 from Markups import *
-from Cities import *
 from flask import Flask, request
 import os
 import random
@@ -69,6 +68,7 @@ def webhook():
 def get_message():
     json_str = request.get_data().decode('utf-8')
     update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
     return '!', 200
 
 
