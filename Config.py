@@ -1,4 +1,5 @@
 Token = '5230209534:AAHBEbxUdkMh3UyRcEPf7uvjW4j-lElBpZU'
+APP_Url = f'https://webhookcitiesbot.herokuapp.com/{Token}'
 Chat = 'private chat id'
 start_mess1 = 'Привет, '
 start_mess2 = 'Сыграем в города?'
