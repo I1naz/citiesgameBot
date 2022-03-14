@@ -13,7 +13,7 @@ def get_city():
     with open('cities/city.csv', encoding='utf-8') as cities:
         reader = csv.reader(cities, delimiter=';', quotechar='"')
         for index, row in enumerate(reader):
-            if index % 2 == 0:
+            if index == 0:
                 continue
             city[f'{row[-1]}'] = f'{row[1]}'
             cities_only.append(row[-1])
@@ -24,7 +24,7 @@ def get_country():
     with open('cities/country.csv', encoding='utf-8') as countries:
         reader = csv.reader(countries, delimiter=';', quotechar='"')
         for index, row in enumerate(reader):
-            if index % 2 == 0:
+            if index == 0:
                 continue
             country[f'{row[0]}'] = f'{row[-1]}'
 
