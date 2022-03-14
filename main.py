@@ -43,7 +43,7 @@ def play(message):
         if not (game.first_city and game.is_he_first):
             if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() in cities_only:
                 game.all_cities += message.text
-                game.first_letters[game.current_city[0].lower] += 1
+                game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
                 game.current_city = choice(cities_only)
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
@@ -60,7 +60,7 @@ def play(message):
             get_country()
             if message.text.capitalize() in cities_only:
                 game.all_cities += message.text
-                game.first_letters[game.current_city[0].lower] += 1
+                game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
                 game.current_city = choice(cities_only)
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
@@ -89,7 +89,7 @@ def callback_inline(call):
                                       reply_markup=None)
                 game.current_city = choice(cities_only)
                 game.all_cities += game.current_city
-                game.first_letters[game.current_city[0].lower] += 1
+                game.first_letters[game.current_city[0].lower()] += 1
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(call.message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
                 cities_only.remove(game.current_city)
