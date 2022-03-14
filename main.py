@@ -14,7 +14,7 @@ server = Flask(__name__)
 class Game:
     def __init__(self):
         self.count = 0
-        self.current_city = None
+        self.current_city = ''
         self.all_cities = ''
         self.is_started = False
         self.is_me_first = False
@@ -44,23 +44,29 @@ def play(message):
             if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() in cities_only:
                 game.all_cities += message.text
                 game.first_letters[game.current_city[0].lower] += 1
+                cities_only.remove(message.text)
                 game.current_city = choice(cities_only)
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                  parse_mode='html')
+                cities_only.remove(game.current_city)
             elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() not in cities_only:
                 bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
             else:
                 bot.send_message(message.chat.id, f'{choice(some_phrases[:-1])} говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
             game.first_city = False
         else:
+            get_city()
+            get_country()
             if message.text.capitalize() in cities_only:
                 game.all_cities += message.text
                 game.first_letters[game.current_city[0].lower] += 1
+                cities_only.remove(message.text)
                 game.current_city = choice(cities_only)
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                  parse_mode='html')
+                cities_only.remove(game.current_city)
             else:
                 bot.send_message(message.chat.id,
                                  f'{choice(some_phrases[:-1])} говори заново',
@@ -77,6 +83,8 @@ def callback_inline(call):
                 game.is_me_first = True
                 game.first_city = True
                 game.is_he_first = False
+                get_city()
+                get_country()
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Начинаю!',
                                       reply_markup=None)
                 game.current_city = choice(cities_only)
@@ -84,6 +92,7 @@ def callback_inline(call):
                 game.first_letters[game.current_city[0].lower] += 1
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(call.message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
+                cities_only.remove(game.current_city)
 
             elif call.data == 'me':
                 game.is_me_first = False
