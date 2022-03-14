@@ -64,8 +64,6 @@ def play(message):
     if message.chat.type == 'private':
         if message.text == 'Сдаться':
             game.more_first_letters()
-            bot.send_message(message.chat.id, choice(win_mess3),
-                             parse_mode='html')
             bot.send_message(message.chat.id, f'Всего названо городов: {game.count}. '
                                               f'Большинство городов начинались на {game.max_first_letters[0]}, их было {game.max_first_letters[-1]}',
                              parse_mode='html')
@@ -95,8 +93,6 @@ def play(message):
                     game.count += 1
                 else:
                     game.more_first_letters()
-                    bot.send_message(message.chat.id, choice(lose_mess),
-                                     parse_mode='html')
                     bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
                                      parse_mode='html')
                     bot.send_message(message.chat.id, f'Всего названо городов: {game.count}. '
