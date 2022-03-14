@@ -15,3 +15,8 @@ btn_help = types.KeyboardButton('/help')
 btn_surrender = types.KeyboardButton('Сдаться')
 markup_helpers.add(btn_help, btn_surrender)
 
+markup_again = types.InlineKeyboardMarkup(row_width=3)
+btn_again = types.InlineKeyboardButton('Да', callback_data='play_again')
+btn_not_again = types.InlineKeyboardButton('Нет', callback_data='not_play_again')
+markup_choice_first.add(btn_again, btn_not_again)
+

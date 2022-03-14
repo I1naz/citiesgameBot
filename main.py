@@ -63,7 +63,8 @@ def help(message):
 def play(message):
     if message.chat.type == 'private':
         if message.text == 'Сдаться':
-            bot.send_message(message.chat.id, f'{choice(win_mess4)}',
+            game.more_first_letters()
+            bot.send_message(message.chat.id, f'{choice(win_mess3)}',
                              parse_mode='html')
             bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
                              parse_mode='html')
@@ -71,24 +72,30 @@ def play(message):
                                               f'Большинство городов начинались на {game.max_first_letters[0]}, их было {game.max_first_letters[-1]}',
                              parse_mode='html')
             game.finish()
+            bot.send_message(message.chat.id, f'{choice(replay_mess)}',
+                             parse_mode='html', reply_markup=markup_again)
         if not (game.first_city and game.is_he_first):
             if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() in cities_only:
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
+                game.count += 1
                 if message.text[-1].upper() in cities_by_first_letter.keys():
                     game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
                     mess = f'{game.current_city}, {country[city[game.current_city]]}'
                     bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                      parse_mode='html')
                     cities_only.remove(game.current_city)
+                    game.count += 1
                 elif message.text[-2].upper() in cities_by_first_letter.keys():
                     game.current_city = choice(cities_by_first_letter[message.text[-2].upper()])
                     mess = f'{game.current_city}, {country[city[game.current_city]]}'
                     bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                      parse_mode='html')
                     cities_only.remove(game.current_city)
+                    game.count += 1
                 else:
+                    game.more_first_letters()
                     bot.send_message(message.chat.id, f'{choice(lose_mess)}',
                                      parse_mode='html')
                     bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
@@ -97,6 +104,8 @@ def play(message):
                                                       f'Большинство городов начинались на {game.max_first_letters[0]}, их было {game.max_first_letters[-1]}',
                                      parse_mode='html')
                     game.finish()
+                    bot.send_message(message.chat.id, f'{choice(replay_mess)}',
+                                     parse_mode='html', reply_markup=markup_again)
             elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() not in cities_only:
                 bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
             else:
@@ -114,6 +123,7 @@ def play(message):
                 bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                  parse_mode='html')
                 cities_only.remove(game.current_city)
+                game.count += 2
             else:
                 bot.send_message(message.chat.id,
                                  f'{choice(some_phrases[:-1])} говори заново',
@@ -137,6 +147,7 @@ def callback_inline(call):
                 game.current_city = choice(cities_only)
                 game.all_cities += game.current_city
                 game.first_letters[game.current_city[0].lower()] += 1
+                game.count += 1
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(call.message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
                 cities_only.remove(game.current_city)
@@ -147,9 +158,15 @@ def callback_inline(call):
                 game.first_city = True
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                                       text='Начинай!', reply_markup=None)
-            elif call.data == 'play':
+            elif call.data == 'play' or call.data == 'play_again':
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Кто начинает?',
                                  reply_markup=markup_choice_first)
+            elif call.data == 'not_play_again':
+                bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                                      text='👋',
+                                      reply_markup=None)
+                bot.send_message(call.message.chat.id, 'Захочется поиграть, приходи!',
+                                 parse_mode='html', reply_markup=markup_main)
             bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text='')
     except Exception as e:
         print(repr(e))
