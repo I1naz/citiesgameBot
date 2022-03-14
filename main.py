@@ -73,7 +73,8 @@ def play(message):
             bot.send_message(message.chat.id, f'{choice(replay_mess)}',
                              parse_mode='html', reply_markup=markup_again)
         if not (game.first_city and game.is_he_first):
-            if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() in cities_only:
+            if (message.text.capitalize().startswith(game.current_city[-1].upper())
+                or message.text.capitalize().startswith(game.current_city[-2].upper())) and message.text.capitalize() in cities_only:
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
