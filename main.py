@@ -116,7 +116,10 @@ def play(message):
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
-                game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
+                if message.text[-1].upper() in cities_by_first_letter.keys():
+                    game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
+                elif message.text[-2].upper() in cities_by_first_letter.keys():
+                    game.current_city = choice(cities_by_first_letter[message.text[-2].upper()])
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                  parse_mode='html')
@@ -154,7 +157,6 @@ def callback_inline(call):
                 game.is_me_first = False
                 game.is_he_first = True
                 game.first_city = True
-                game.is_started = True
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                                       text='Начинай!', reply_markup=None)
             elif call.data == 'play' or call.data == 'play_again':
