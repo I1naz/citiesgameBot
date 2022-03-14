@@ -64,9 +64,7 @@ def play(message):
     if message.chat.type == 'private':
         if message.text == 'Сдаться':
             game.more_first_letters()
-            bot.send_message(message.chat.id, f'{choice(win_mess3)}',
-                             parse_mode='html')
-            bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
+            bot.send_message(message.chat.id, choice(win_mess3),
                              parse_mode='html')
             bot.send_message(message.chat.id, f'Всего названо городов: {game.count}. '
                                               f'Большинство городов начинались на {game.max_first_letters[0]}, их было {game.max_first_letters[-1]}',
@@ -96,7 +94,7 @@ def play(message):
                     game.count += 1
                 else:
                     game.more_first_letters()
-                    bot.send_message(message.chat.id, f'{choice(lose_mess)}',
+                    bot.send_message(message.chat.id, choice(lose_mess),
                                      parse_mode='html')
                     bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
                                      parse_mode='html')
@@ -156,6 +154,7 @@ def callback_inline(call):
                 game.is_me_first = False
                 game.is_he_first = True
                 game.first_city = True
+                game.is_started = True
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                                       text='Начинай!', reply_markup=None)
             elif call.data == 'play' or call.data == 'play_again':
