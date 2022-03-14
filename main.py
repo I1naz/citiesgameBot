@@ -62,33 +62,41 @@ def help(message):
 @bot.message_handler(content_types=['text'])
 def play(message):
     if message.chat.type == 'private':
+        if message.text == 'Сдаться':
+            bot.send_message(message.chat.id, f'{choice(win_mess4)}',
+                             parse_mode='html')
+            bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
+                             parse_mode='html')
+            bot.send_message(message.chat.id, f'Всего названо городов: {game.count}. '
+                                              f'Большинство городов начинались на {game.max_first_letters[0]}, их было {game.max_first_letters[-1]}',
+                             parse_mode='html')
+            game.finish()
         if not (game.first_city and game.is_he_first):
             if message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() in cities_only:
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
-                try:
+                if message.text[-1].upper() in cities_by_first_letter.keys():
                     game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
                     mess = f'{game.current_city}, {country[city[game.current_city]]}'
                     bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                      parse_mode='html')
                     cities_only.remove(game.current_city)
-                except Exception:
-                    try:
-                        game.current_city = choice(cities_by_first_letter[message.text[-2].upper()])
-                        mess = f'{game.current_city}, {country[city[game.current_city]]}'
-                        bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
-                                         parse_mode='html')
-                        cities_only.remove(game.current_city)
-                    except Exception:
-                        bot.send_message(message.chat.id, f'{choice(lose_mess)}',
-                                         parse_mode='html')
-                        bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
-                                         parse_mode='html')
-                        bot.send_message(message.chat.id, f'Всего названо городов: {game.count}. '
-                                                          f'Большинство городов начинались на {game.max_first_letters[0]}, их было {game.max_first_letters[-1]}',
-                                         parse_mode='html')
-                        game.finish()
+                elif message.text[-2].upper() in cities_by_first_letter.keys():
+                    game.current_city = choice(cities_by_first_letter[message.text[-2].upper()])
+                    mess = f'{game.current_city}, {country[city[game.current_city]]}'
+                    bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
+                                     parse_mode='html')
+                    cities_only.remove(game.current_city)
+                else:
+                    bot.send_message(message.chat.id, f'{choice(lose_mess)}',
+                                     parse_mode='html')
+                    bot.send_message(message.chat.id, f'В итоге получилось слово: {game.all_cities}',
+                                     parse_mode='html')
+                    bot.send_message(message.chat.id, f'Всего названо городов: {game.count}. '
+                                                      f'Большинство городов начинались на {game.max_first_letters[0]}, их было {game.max_first_letters[-1]}',
+                                     parse_mode='html')
+                    game.finish()
             elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() not in cities_only:
                 bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
             else:
