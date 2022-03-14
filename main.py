@@ -28,7 +28,7 @@ class Game:
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
-    bot.send_message(message.chat.id, '%E2%9C%8B', parse_mode='html',
+    bot.send_message(message.chat.id, '✋', parse_mode='html',
                      reply_markup=markup_helpers)
     bot.send_message(message.chat.id, f'{start_mess1}{message.from_user.first_name}! {start_mess2}', parse_mode='html',
                      reply_markup=markup_main)
