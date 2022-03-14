@@ -28,6 +28,8 @@ class Game:
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
+    bot.send_message(message.chat.id, '%E2%9C%8B', parse_mode='html',
+                     reply_markup=markup_helpers)
     bot.send_message(message.chat.id, f'{start_mess1}{message.from_user.first_name}! {start_mess2}', parse_mode='html',
                      reply_markup=markup_main)
 
@@ -45,7 +47,7 @@ def play(message):
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
-                game.current_city = choice(cities_only)
+                game.current_city = choice(cities_by_first_letter[message.text[0].upper()])
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                  parse_mode='html')
@@ -62,7 +64,7 @@ def play(message):
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
                 cities_only.remove(message.text)
-                game.current_city = choice(cities_only)
+                game.current_city = choice(cities_by_first_letter[message.text[0].upper()])
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}',
                                  parse_mode='html')

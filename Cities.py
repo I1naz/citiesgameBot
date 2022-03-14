@@ -1,6 +1,7 @@
 import csv
 from random import choice
 city = dict()
+cities_by_first_letter = dict()
 cities_only = []
 country = dict()
 # first_letters = {'а': 0, 'б': 0, 'в': 0, 'г': 0, 'д': 0, 'е': 0, 'ё': 0, 'ж': 0, 'з': 0, 'и': 0, 'й': 0,
@@ -17,7 +18,10 @@ def get_city():
                 continue
             city[f'{row[-1]}'] = f'{row[1]}'
             cities_only.append(row[-1])
-    print(cities_only)
+            try:
+                cities_by_first_letter[row[-1][0]].append(row[-1])
+            except Exception as h:
+                cities_by_first_letter[row[-1][0]] = [row[-1]]
 
 
 def get_country():
