@@ -136,7 +136,6 @@ def callback_inline(call):
             if call.data == 'you':
                 game.is_started = True
                 game.is_me_first = True
-                game.first_city = True
                 game.is_he_first = False
                 get_city()
                 get_country()
@@ -154,6 +153,7 @@ def callback_inline(call):
                 game.is_me_first = False
                 game.is_he_first = True
                 game.first_city = True
+                game.is_started = True
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                                       text='Начинай!', reply_markup=None)
             elif call.data == 'play' or call.data == 'play_again':
