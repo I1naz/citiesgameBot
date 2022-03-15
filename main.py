@@ -105,7 +105,7 @@ def play(message):
                                          parse_mode='html')
                         bot.send_message(message.chat.id, f'{choice(replay_mess)}',
                                          parse_mode='html', reply_markup=markup_again)
-                elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.strip().capitalize() in used_cities:
+                elif (message.text.capitalize().startswith(game.current_city[-1].upper()) or message.text.capitalize().startswith(game.current_city[-2].upper())) and message.text.strip().capitalize() in used_cities:
                     bot.send_message(message.chat.id, f'{reuse_mess}, говори заново. Тебе на {game.current_city[-1].upper()}, если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}', parse_mode='html')
                 elif message.text.capitalize() not in cities_only:
                     bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново. Тебе на {game.current_city[-1].upper()}, если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}', parse_mode='html')
