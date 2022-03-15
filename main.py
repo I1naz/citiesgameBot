@@ -75,7 +75,7 @@ def play(message):
                 or message.text.capitalize().startswith(game.current_city[-2].upper())) and message.text.capitalize() in cities_only:
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
-                cities_only.remove(message.text)
+                cities_only.remove(message.text.strip().capitalize())
                 game.count += 1
                 if message.text[-1].upper() in cities_by_first_letter.keys():
                     game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
@@ -112,7 +112,7 @@ def play(message):
             if message.text.capitalize() in cities_only:
                 game.all_cities += message.text
                 game.first_letters[message.text[0].lower()] += 1
-                cities_only.remove(message.text)
+                cities_only.remove(message.text.strip().capitalize())
                 if message.text[-1].upper() in cities_by_first_letter.keys():
                     game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
                 elif message.text[-2].upper() in cities_by_first_letter.keys():
