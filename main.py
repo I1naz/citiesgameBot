@@ -76,6 +76,7 @@ def play(message):
                     game.all_cities += message.text
                     game.first_letters[message.text[0].lower()] += 1
                     cities_only.remove(message.text.strip().capitalize())
+                    used_cities.append(message.text.strip().capitalize())
                     game.count += 1
                     if message.text[-1].upper() in cities_by_first_letter.keys():
                         game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
@@ -92,6 +93,7 @@ def play(message):
                                                           f'если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}',
                                          parse_mode='html')
                         cities_only.remove(game.current_city)
+                        used_cities.append(game.current_city)
                         game.count += 1
                     else:
                         game.more_first_letters()
@@ -102,7 +104,9 @@ def play(message):
                                          parse_mode='html')
                         bot.send_message(message.chat.id, f'{choice(replay_mess)}',
                                          parse_mode='html', reply_markup=markup_again)
-                elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.capitalize() not in cities_only:
+                elif message.text.capitalize().startswith(game.current_city[-1].upper()) and message.text.strip().capitalize() in used_cities:
+                    bot.send_message(message.chat.id, f'{reuse_mess}, говори заново. Тебе на {game.current_city[-1].upper()}, если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}', parse_mode='html')
+                elif message.text.capitalize() not in cities_only:
                     bot.send_message(message.chat.id, f'{some_phrases[-1]}, говори заново. Тебе на {game.current_city[-1].upper()}, если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}', parse_mode='html')
                 else:
                     bot.send_message(message.chat.id, f'{choice(some_phrases[:-1])} говори заново. Тебе на {game.current_city[-1].upper()}, если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}', parse_mode='html')
@@ -114,6 +118,7 @@ def play(message):
                     game.all_cities += message.text
                     game.first_letters[message.text[0].lower()] += 1
                     cities_only.remove(message.text.strip().capitalize())
+                    used_cities.append(message.text.strip().capitalize())
                     if message.text[-1].upper() in cities_by_first_letter.keys():
                         game.current_city = choice(cities_by_first_letter[message.text[-1].upper()])
                     elif message.text[-2].upper() in cities_by_first_letter.keys():
@@ -123,6 +128,7 @@ def play(message):
                                                       f'если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}',
                                      parse_mode='html')
                     cities_only.remove(game.current_city)
+                    used_cities.append(game.current_city)
                     game.count += 2
                 else:
                     bot.send_message(message.chat.id,
@@ -150,6 +156,7 @@ def callback_inline(call):
                 mess = f'{game.current_city}, {country[city[game.current_city]]}'
                 bot.send_message(call.message.chat.id, f'{mess}. Тебе на {game.current_city[-1].upper()}', parse_mode='html')
                 cities_only.remove(game.current_city)
+                used_cities.append(game.current_city)
 
             elif call.data == 'me':
                 game.is_me_first = False

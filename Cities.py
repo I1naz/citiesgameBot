@@ -4,6 +4,7 @@ city = dict()
 cities_by_first_letter = dict()
 cities_only = []
 country = dict()
+used_cities = []
 
 
 def get_city():
