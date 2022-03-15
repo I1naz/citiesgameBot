@@ -163,6 +163,7 @@ def callback_inline(call):
                                       reply_markup=markup_choice_first)
                 game.finish()
             elif call.data == 'not_play_again':
+                game.finish()
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                                       text='👋',
                                       reply_markup=None)
