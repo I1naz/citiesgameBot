@@ -85,6 +85,7 @@ def play(message):
                                                           f'если нет на {game.current_city[-1].upper()}, то на {game.current_city[-2].upper()}',
                                          parse_mode='html')
                         cities_only.remove(game.current_city)
+                        used_cities.append(game.current_city)
                         game.count += 1
                     elif message.text[-2].upper() in cities_by_first_letter.keys():
                         game.current_city = choice(cities_by_first_letter[message.text[-2].upper()])
@@ -145,6 +146,7 @@ def callback_inline(call):
                 game.is_started = True
                 game.is_me_first = True
                 game.is_he_first = False
+                game.first_city = False
                 get_city()
                 get_country()
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Начинаю!',

@@ -11,6 +11,7 @@ def get_city():
     cities_only.clear()
     city.clear()
     cities_by_first_letter.clear()
+    used_cities.clear()
     with open('cities/city.csv', encoding='utf-8') as cities:
         reader = csv.reader(cities, delimiter=';', quotechar='"')
         for index, row in enumerate(reader):
