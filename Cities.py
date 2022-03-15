@@ -7,6 +7,9 @@ country = dict()
 
 
 def get_city():
+    cities_only.clear()
+    city.clear()
+    cities_by_first_letter.clear()
     with open('cities/city.csv', encoding='utf-8') as cities:
         reader = csv.reader(cities, delimiter=';', quotechar='"')
         for index, row in enumerate(reader):
@@ -21,6 +24,7 @@ def get_city():
 
 
 def get_country():
+    country.clear()
     with open('cities/country.csv', encoding='utf-8') as countries:
         reader = csv.reader(countries, delimiter=';', quotechar='"')
         for index, row in enumerate(reader):
